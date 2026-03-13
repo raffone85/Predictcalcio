@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Predictcalcio</title>
-<style>body{font-family:Arial,sans-serif;margin:0;padding:20px;background:#f4f4f4}.header{text-align:center;background:#007bff;color:white;padding:20px}.leagues{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.league-btn{background:#28a745;color:white;padding:15px 20px;border:none;border-radius:8px;cursor:pointer;font-size:16px}.league-btn:hover{background:#218838}.matches{margin-top:20px}.match{background:white;margin:10px 0;padding:15px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}.match h3{margin:0 0 10px;color:#333}.data{font-size:14px;color:#666}#analysis{display:none;margin-top:20px;background:white;padding:20px;border-radius:8px}</style>
+<style>body{font-family:Arial;margin:0;padding:20px;background:#f4f4f4}.header{text-align:center;background:#007bff;color:white;padding:20px}.leagues{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.league-btn{background:#28a745;color:white;padding:15px;border:none;border-radius:8px;cursor:pointer}.league-btn:hover{background:#218838}.matches{margin-top:20px}.match{background:white;margin:10px 0;padding:15px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1);cursor:pointer}.match h3{margin:0 0 10px;color:#333}.data{font-size:14px;color:#666}#analysis{display:none;margin-top:20px;background:white;padding:20px;border-radius:8px}</style>
 </head>
 <body>
-<div class="header"><h1>Predictcalcio</h1><p>Analisi Statistica</p></div>
+<div class="header"><h1>🔥 Predictcalcio</h1><p>Analisi Statistica Raffaele</p></div>
 <div class="leagues">
 <button class="league-btn" onclick="loadLeague('seriea')">Serie A</button>
 </div>
-<div id="matches" class="matches"></div>
+<div id="matches"></div>
 <div id="analysis"></div>
 <script>
 let currentData={};
-async function loadLeague(l){try{const r=await fetch(`data/${l}.json`);currentData=await r.json();showMatches(currentData.calendar)}catch(e){document.getElementById('matches').innerHTML='<p>No dati '+l+'</p>'}}
-function showMatches(m){let h='<h2>Calendario Serie A</h2>';m.forEach((match,i)=>h+=`<div class="match" onclick="analyzeMatch(${i})"><h3>${match[0]}</h3><div class="data">${match[1]} vs ${match[2]}</div></div>`);document.getElementById('matches').innerHTML=h}
-function analyzeMatch(i){const m=currentData.calendar[i],r=currentData.referees[0]||[],t=currentData.table[0]||[];document.getElementById('analysis').innerHTML=`<h2>${m[1]} vs ${m[2]}</h2><p><strong>Data:</strong> ${m[0]}</p><p><strong>Arbitro:</strong> ${r[0]}</p><p><strong>Classifica:</strong> ${t[1]}</p><p><strong>Statistiche attese:</strong><br>Corner: 9.6<br>Value bet: Over 9.5</p>`;document.getElementById('analysis').style.display='block'}
+async function loadLeague(l){try{const r=await fetch(`${l}.json`);currentData=await r.json();showMatches(currentData.calendar)}catch(e){document.getElementById('matches').innerHTML='<p>Carica '+l+'.json</p>'}}
+function showMatches(m){let h='<h2>Calendario</h2>';m.forEach((match,i)=>h+=`<div class="match" onclick="analyze(${i})"><h3>${match[0]}</h3><p>${match[1]} vs ${match[2]}</p></div>`);document.getElementById('matches').innerHTML=h}
+function analyze(i){const m=currentData.calendar[i];document.getElementById('analysis').innerHTML=`<h2>${m[1]} vs ${m[2]}</h2><p>${m[0]}</p><h3>Arbitro: ${currentData.referees[0][0]}</h3><p>Classifica: ${currentData.table[0][1]}</p><p>Corner attesi: 9.6<br>Value bet: Over 9.5</p>`;document.getElementById('analysis').style.display='block'}
 </script>
 </body>
 </html>

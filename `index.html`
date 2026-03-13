@@ -1,4 +1,79 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predictcalcio</title>
+<style>
+body{font-family:Arial;background:#f0f0f0;margin:0;padding:20px;text-align:center}
+header{background:linear-gradient(to bottom,#0000ff,#000080);color:white;padding:20px;border-radius:10px;margin-bottom:20px}
+h1{margin:0;font-size:24px}
+button{background:#4CAF50;color:white;padding:15px;margin:10px;border:none;border-radius:5px;font-size:18px;width:90%;cursor:pointer}
+.match{background:white;margin:10px auto;padding:15px;border-radius:8px;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.1);max-width:500px;text-align:left}
+.match:hover{background:#e8f5e9}
+#calendar{display:none;margin:20px 0}
+#analysis{display:none;background:white;margin:20px auto;padding:20px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.2);max-width:500px;text-align:left}
+.stat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee}
+.value-bet{background:#fff3cd;padding:10px;border-radius:5px;margin:10px 0;font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+<h1>🔥 Predictcalcio</h1>
+<p>Analisi Statistica - Raffaele</p>
+</header>
+<button onclick="loadSerieA()">🇮🇹 Serie A</button>
+<div id="calendar"></div>
+<div id="analysis"></div>
+<script>
+let calData=null,refData=null,tabData=null,matData=null;
+async function loadSerieA(){
+  try{
+    const [c,r,t,m]=await Promise.all([
+      fetch('data/seriea/calendar.json').then(x=>x.json()),
+      fetch('data/seriea/referees.json').then(x=>x.json()),
+      fetch('data/seriea/table.json').then(x=>x.json()),
+      fetch('data/seriea/matches.json').then(x=>x.json())
+    ]);
+    calData=c;refData=r;tabData=t;matData=m;
+    const div=document.getElementById('calendar');
+    div.innerHTML='<h2>📅 Calendario Serie A</h2>';
+    c.matches.forEach((m,i)=>{
+      const d=document.createElement('div');
+      d.className='match';
+      d.innerHTML='<strong>'+m[1]+' vs '+m[2]+'</strong><br><small>'+m[0]+'</small>';
+      d.onclick=()=>showMatch(i);
+      div.appendChild(d);
+    });
+    div.style.display='block';
+    document.getElementById('analysis').style.display='none';
+  }catch(e){alert('Errore caricamento dati: '+e.message)}
+}
+function showMatch(i){
+  try{
+    const m=calData.matches[i];
+    const arb=refData.arbiters[i%refData.arbiters.length];
+    const top=tabData.standings[0];
+    const stat=matData.stats?matData.stats[i%matData.stats.length]:{};
+    document.getElementById('analysis').innerHTML=
+      '<h2>⚽ '+m[1]+' vs '+m[2]+'</h2>'+
+      '<p>📅 '+m[0]+'</p>'+
+      '<h3>🟨 Arbitro: '+arb[0]+'</h3>'+
+      '<div class="stat-row"><span>Gialli per gara</span><span>'+arb[1]+'</span></div>'+
+      '<div class="stat-row"><span>Falli per gara</span><span>'+arb[2]+'</span></div>'+
+      '<div class="stat-row"><span>Rossi per gara</span><span>'+arb[3]+'</span></div>'+
+      '<div class="stat-row"><span>Tendenza</span><span>'+arb[5]+'</span></div>'+
+      '<h3>📊 Classifica</h3>'+
+      '<div class="stat-row"><span>1° '+top[1]+'</span><span>'+top[7]+' pts</span></div>'+
+      '<h3>📈 Statistiche attese</h3>'+
+      '<div class="stat-row"><span>Tiri casa</span><span>'+(stat.shots_home||12.5)+'</span></div>'+
+      '<div class="stat-row"><span>Tiri ospite</span><span>'+(stat.shots_away||10.2)+'</span></div>'+
+      '<div class="stat-row"><span>Corner casa</span><span>'+(stat.corners_home||5.8)+'</span></div>'+
+      '<div class="stat-row"><span>Corner ospite</span><span>'+(stat.corners_away||4.7)+'</span></div>'+
+      '<div class="value-bet">💰 Value Bet: Over 9.5 Corner @ 1.85</div>';
+    document.getElementById('analysis').style.display='block';
+  }catch(e){alert('Errore analisi: '+e.message)}
+}
+</script>
+</body>
+</html>

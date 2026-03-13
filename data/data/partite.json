@@ -1,0 +1,20 @@
+{
+  "partite":[
+    {
+      "home":"Inter",
+      "away":"Juventus",
+      "tiri_home":14,
+      "tiri_away":9,
+      "falli_home":11,
+      "falli_away":15
+    },
+    {
+      "home":"Milan",
+      "away":"Roma",
+      "tiri_home":12,
+      "tiri_away":10,
+      "falli_home":13,
+      "falli_away":14
+    }
+  ]
+}

@@ -1,5 +1,11 @@
 {
-  "calendar": [["13 March 2026 - 19:45", "Torino", "Parma"]],
-  "referees": [["Rosario Abisso", 8, 31, 3, "4.3"]],
-  "table": [["1", "Inter Milan", 28, 22, 1, 5, 42, 67, "WWWL"]]
+  "calendar": [
+    ["13 March 2026 - 19:45", "Torino", "Parma"]
+  ],
+  "referees": [
+    ["Rosario Abisso", 8, 31, 3, "4.3"]
+  ],
+  "table": [
+    ["1", "Inter Milan", 28, 22, 1, 5, 42, 67, "WWWL"]
+  ]
 }
